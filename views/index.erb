@@ -1,0 +1,13 @@
+<ul>
+<% @thoughts.each do |thought| %>
+  <li><%= thought.to_s %></li>
+  <% if thought.description %>
+    <ul>
+      <li><%= thought.description %></li>
+    </ul>
+  <% end %>
+<% end %>
+</ul>
+
+<b>Tags: </b><%= @tags.to_a.map(&:name).join(', ') %>
+
