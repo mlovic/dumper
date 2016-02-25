@@ -1,79 +1,53 @@
+$:.unshift File.dirname(__FILE__)
+
 START_TIME = Time.new
-def log(str)
+def log_time(str)
   puts (Time.new - START_TIME).to_s + '  ' + str
 end
 
 require 'active_record'
-require 'logger'
-
-log 'AR loaded'
-
-$:.unshift File.dirname(__FILE__)
-
-
+  log_time 'AR loaded'
 require 'thor'
-log 'Thor loaded'
+  log_time 'Thor loaded'
+require 'pp'
+
 require 'lib/thought'
 require 'lib/parser'
+require 'lib/editor_input'
+require 'lib/dump'
 
 DB_PATH = '/home/marko/dumper/dumper.sqlite3'
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: DB_PATH)
 
-log 'AR established connection'
+log_time 'AR established connection'
 
 class Dumper < Thor
-  log 'Inherited from Thor'
-  #include Thor::Actions # necessary?
+  log_time 'Inherited from Thor'
 
   # TODO open vim before requires
   desc "dump TITLE", "create new thought"
   method_option :edit, aliases: '-e'
-  def dump(title = nil, options = {})
-    if title
-      thought = Thought.new(title: title)
-      thought.tags << Tag.find_or_create_by(name: 'todo') if options[:todo]
-      thought.save!
-      puts "Thought #{thought.id} created  -  " + thought.to_s
-    else
-      file = Tempfile.new("buffer")
-      path = file.path
-      pid = spawn("vim +star #{path}")
-      Process.wait(pid)
-      str = File.read(path)
-      raise 'File blank!' if str.blank?
-      attrs = Parser.parse(str)
-      attrs.map do |attrs| 
-        thought = Thought.create!(attrs)
-        puts "Thought #{thought.id} created  -  " + thought.to_s
-      end
-    end
+  def dump(str = nil, options = {})
+    # TODO how to choose editor
+    str = EditorInput.new.get_text unless str
+    dump = Dump.new(str)
+    dump.process
   end
 
   desc 'amend', 'amend last dump'
   def amend 
     thought = Thought.last
 
-    file = Tempfile.new("buffer")
-    p thought.to_dumpfile
-    file.write(thought.to_dumpfile)
-    file.close
-    # TODO Abstract to get_from_vim method passing default test as arg
-    path = file.path
-    pid = spawn("vim #{path}")
-    Process.wait(pid)
-    str = File.read(path)
-    return if str == thought.to_dumpfile
-    attrs = Parser.parse(str)
-    thought.update(attrs.shift)
-    attrs.map do |attrs| 
-      thought = Thought.create!(attrs)
-      puts "Thought #{thought.id} created  -  " + thought.to_s
-    end
-  end
+    editor_in = EditorInput.new(thought.to_dumpfile) # figure this out. use #to_s?
+    str = editor_in.get_text 
 
-  #def vim(path)
-  #end
+    return if str == thought.to_dumpfile
+    dump = Dump.new(str)
+    thought.delete
+    dump.process
+    # updating a thought. doesn't feel right
+  end
 
   desc 'todo TITLE', 'same as dump but adds todo tag. Only works inline.'
   def todo(title = nil)
@@ -89,7 +63,7 @@ class Dumper < Thor
       #clean this up
       thoughts = Thought.joins(:tags).where(tags: {name: tag}).merge(thoughts)
     end
-    thoughts.each { |th| puts th.created_at.strftime('%H:%M') + ' -  ' + th.to_s }
+    thoughts.each { |th| puts "\n" + th.created_at.strftime('%H:%M') + ' -  ' + th.to_s }
   end
 
   desc 'ls', 'alias for list command'
