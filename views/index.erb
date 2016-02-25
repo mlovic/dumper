@@ -1,3 +1,8 @@
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<div class="container-fluid">
+  
 <ul>
 <% @thoughts.each do |thought| %>
   <li><%= thought.to_s %></li>
@@ -11,3 +16,4 @@
 
 <b>Tags: </b><%= @tags.to_a.map(&:name).join(', ') %>
 
+</div>
