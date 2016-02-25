@@ -5,7 +5,7 @@
   
 <ul>
 <% @thoughts.each do |thought| %>
-  <li><%= thought.to_s %></li>
+  <li><%= thought.title %></li>
   <% if thought.description %>
     <ul>
       <li><%= thought.description %></li>

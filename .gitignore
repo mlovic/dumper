@@ -1,0 +1,5 @@
+*sqlite3*
+*.log
+old_dump
+gmail.rb
+

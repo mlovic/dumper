@@ -12,12 +12,15 @@ class Thought < ActiveRecord::Base
 
   validates :title, presence: true, allow_blank: false
   validates :description, length: {minimum: 1}, allow_nil: true
-
-  before_save :parse_tags
-  # TODO not really this class's responsibility
   
   def to_s
     self.title
+  end
+
+  def text
+    str = self.title
+    str += "\n\n" + self.description if self.description
+    return str
   end
 
   def to_dumpfile
@@ -27,15 +30,5 @@ class Thought < ActiveRecord::Base
   end
 
   protected
-
-    def parse_tags
-      found_tags = title.scan(/(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/i).flatten
-      p found_tags
-      found_tags.each do |tag_name|
-        tag = Tag.find_or_create_by!(name: tag_name)
-        self.tags << tag
-      end
-      # replace with map?
-    end
 
 end
