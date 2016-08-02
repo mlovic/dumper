@@ -24,7 +24,6 @@ class Parser
   def parse_thought(dump)
     title, desc = dump.strip.split("\n", 2).map(&:strip)
     attrs = {title: title, description: desc}
-    puts 'title: ' + title
     return attrs
   end
 

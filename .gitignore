@@ -2,4 +2,6 @@
 *.log
 old_dump
 gmail.rb
-
+.agignore
+tags
+todo

@@ -30,7 +30,12 @@ class Dumper < Thor
   method_option :edit, aliases: '-e'
   def dump(str = nil, options = {})
     # TODO how to choose editor
-    str = EditorInput.new.get_text unless str
+    #if input = STDIN.gets
+      #str = input
+      #p str
+    #end
+    #exit
+r   str = EditorInput.new.get_text unless str # change to ||= syntax
     dump = Dump.new(str)
     dump.process
   end
