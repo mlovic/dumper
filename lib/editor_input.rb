@@ -5,9 +5,13 @@ class EditorInput
     @text = starting_text
     write_to_buffer(starting_text) if starting_text
   end
+
+  def start
+    @pid = spawn_editor
+  end
     
   def get_text
-    spawn_editor
+    Process.wait(@pid) # probs shouldn't belong here 
     str = File.read(path)
   end
 
@@ -38,10 +42,11 @@ end
 class Editor
   # prompt
   # start with i
+  # insert mode
 
+  # returns PID of editor process
   def self.spawn(path, insert_mode: false)
     pid = Kernel.spawn("vim #{ "+star" if insert_mode } #{path}")
-    Process.wait(pid) # probs shouldn't belong here 
   end
 
 end

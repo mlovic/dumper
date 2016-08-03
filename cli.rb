@@ -36,7 +36,11 @@ class Dumper < Thor
       #p str
     #end
     #exit
-r   str = EditorInput.new.get_text unless str # change to ||= syntax
+    unless str # change to ||= syntax
+      editor = EditorInput.new
+      editor.start
+      str = editor.get_text
+    end
     dump = Dump.new(str)
     dump.process
   end
