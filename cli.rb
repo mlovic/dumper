@@ -16,7 +16,8 @@ require 'lib/parser'
 require 'lib/editor_input'
 require 'lib/dump'
 
-DB_PATH = '/home/marko/dumper/dumper.sqlite3'
+ROOT = File.dirname(__FILE__)
+DB_PATH = File.join(ROOT, 'db/dumper.sqlite3')
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: DB_PATH)
 

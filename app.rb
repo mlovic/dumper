@@ -7,7 +7,7 @@ require "sinatra/activerecord"
 require 'lib/thought'
 require 'lib/tag'
 
-set :database, {adapter: "sqlite3", database: "dumper.sqlite3"}
+set :database, {adapter: "sqlite3", database: "db/dumper.sqlite3"}
 ActiveRecord::Base.logger = Logger.new('db/debug.log')
 
 get '/' do
