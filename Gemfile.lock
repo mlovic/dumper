@@ -17,6 +17,7 @@ GEM
     arel (6.0.3)
     builder (3.2.2)
     coderay (1.1.0)
+    database_cleaner (1.5.1)
     diff-lcs (1.2.5)
     ffi (1.9.10)
     formatador (0.2.5)
@@ -100,6 +101,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  database_cleaner
   gmail
   guard-rspec
   rake
