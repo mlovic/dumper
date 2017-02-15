@@ -5,3 +5,4 @@ gmail.rb
 .agignore
 tags
 todo
+.*sw*

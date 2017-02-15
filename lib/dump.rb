@@ -1,36 +1,44 @@
+require 'mongo'
+
 class Dump
   HASHTAG_REGEX = /(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/i
-  def initialize(str)
+
+  def initialize(str, timestamp: nil, title: nil)
     @text = str
-    raise 'Dump blank!' if str.blank?
+    @timestamp = timestamp
+    @title = title
+    raise 'Dump blank!' if str == ''
   end
 
   def process
-    attrs = parse
-    attrs.map do |attrs| 
-      thought = create_thought(attrs)
-      create_tags(thought)
-    end
+    tags = create_tags(@text)
+    thought = {body: @text, tags: tags, num: next_num, title: @title}.compact
+    persist_thought(thought)
   end
 
   private
 
-    def create_tags(thought)
-      found_tags = thought.text.scan(HASHTAG_REGEX).flatten
-      found_tags.each do |tag_name|
-        tag = Tag.find_or_create_by!(name: tag_name)
-        thought.tags << tag
-      end
+    def client
+        @client ||= Mongo::Client.new([ '127.0.0.1:27017' ], database: 'dump')
     end
 
-    def parse
-      attrs = Parser.parse(@text)
+    def next_num
+      @num = client[:thoughts].find({}, {num: 1}).sort({num: -1}).limit(1).first['num'] + 1
     end
 
-    def create_thought(attrs)
-      thought = Thought.create!(attrs)
-      puts "Thought #{thought.id} created  -  " + thought.to_s
-      return thought
+    def persist_thought(thought)
+      client[:thoughts].insert_one(thought.merge(make_timestamps))
+      puts "Thought #{@id} created"
+    end
+
+    def make_timestamps
+      # TODO what to do about tz?
+      ts = @timestamp || Time.now
+      {created_at: ts, updated_at: ts}
+    end
+
+    def create_tags(str)
+      found_tags = str.scan(HASHTAG_REGEX).flatten
     end
 end
 
