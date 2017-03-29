@@ -7,7 +7,7 @@ class Dump
     @text = str
     @timestamp = timestamp
     @title = title
-    raise 'Dump blank!' if str == ''
+    abort('Dump blank!') if str == ''
   end
 
   def process
