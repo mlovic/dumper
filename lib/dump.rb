@@ -19,7 +19,7 @@ class Dump
     # TODO send title too?
     puts RemoteDump.new(@text).call rescue puts "Error making remote call: #{$!}"
     tags = create_tags(@text)
-    thought = {body: @text, tags: tags, num: next_num, title: @title}.compact
+    thought = {body: @text, tags: tags, num: next_num, title: @title}
     persist_thought(thought)
   end
 
