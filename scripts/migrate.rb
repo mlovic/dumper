@@ -1,3 +1,5 @@
+# SQLite -> MongoDB migration script
+#
 require 'pp'
 require 'sqlite3'
 require 'mongo'

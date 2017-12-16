@@ -2,6 +2,7 @@ require_relative 'spec_helper'
 require_relative '../cli'
 require_relative '../lib/dump'
 
+# TODO fix this. ar_init was removed with the rest of old AR code
 require_relative 'ar_init'
  
 RSpec.describe Dumper do
