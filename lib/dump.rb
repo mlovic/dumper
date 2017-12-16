@@ -34,7 +34,8 @@ class Dump
     end
 
     def persist_thought(thought)
-      client[:thoughts].insert_one(thought.merge(make_timestamps))
+      client[:thoughts].insert_one(thought.merge(make_timestamps)
+                                          .merge(archived: false))
       puts "Thought #{@id} created"
     end
 
