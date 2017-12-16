@@ -18,7 +18,7 @@ class EditorInput
   private
 
     def spawn_editor
-      editor.spawn(path, insert_mode: new_thought?)
+      editor.spawn(path, insert_mode: new_note?)
     end
 
     def write_to_buffer(text)
@@ -34,7 +34,7 @@ class EditorInput
       @file.path
     end
 
-    def new_thought?
+    def new_note?
       !@text
     end
 end

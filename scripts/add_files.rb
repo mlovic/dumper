@@ -5,18 +5,18 @@ require 'pp'
 
 require 'lib/dump'
 
-@thoughts = []
+@notes = []
 Dir.glob('/home/marko/*_dump') do |file_path|
   file = File.new(file_path)
   file_name = file_path.split('/').last.strip
-  @thoughts << {body:  file.read.strip,
+  @notes << {body:  file.read.strip,
                 ts:    file.ctime,
                 title: file_name}
 end
 
-@thoughts.sort_by! { |t| t[:ts] }
+@notes.sort_by! { |t| t[:ts] }
 
-@thoughts.each do |th|
+@notes.each do |th|
   #pp th
   #require 'irb'
   #binding.irb

@@ -12,6 +12,8 @@ require 'pp'
 require 'lib/dump'
 
 # TODO problems loading this file without AR
+#
+# TODO remove all old AR stuff
 
 ROOT = File.dirname(__FILE__)
 
@@ -19,7 +21,7 @@ class Dumper < Thor
   log_time 'Inherited from Thor'
 
   # TODO open vim before requires
-  desc "dump TITLE", "create new thought"
+  desc "dump TITLE", "create new note"
   method_option :edit, aliases: '-e'
   def dump(str = nil, options = {})
     # TODO how to choose editor
@@ -63,7 +65,7 @@ class Dumper < Thor
     puts 'Not implemented yet'
   end
 
-  desc "list", "list all thoughts. Default is only from today."
+  desc "list", "list all notes. Default is only from today."
   method_option :all, aliases: '-a'
   # TODO -a shouldn't take argument
   def list(tag = nil)

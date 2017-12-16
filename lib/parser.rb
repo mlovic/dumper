@@ -10,7 +10,7 @@ class Parser
   def parse
     # TODO fix
     dumps = get_individual_dumps(@str)
-    dumps.map { |dump| parse_thought(dump) }
+    dumps.map { |dump| parse_note(dump) }
   end
 
   def separator
@@ -21,7 +21,7 @@ class Parser
     str.split(separator)
   end
 
-  def parse_thought(dump)
+  def parse_note(dump)
     title, desc = dump.strip.split("\n", 2).map(&:strip)
     attrs = {title: title, description: desc}
     return attrs

@@ -19,8 +19,8 @@ class Dump
     # TODO send title too?
     puts RemoteDump.new(@text).call rescue puts "Error making remote call: #{$!}"
     tags = create_tags(@text)
-    thought = {body: @text, tags: tags, num: next_num, title: @title}
-    persist_thought(thought)
+    note = {body: @text, tags: tags, num: next_num, title: @title}
+    persist_note(note)
   end
 
   private
@@ -30,13 +30,13 @@ class Dump
     end
 
     def next_num
-      @num = client[:thoughts].find({}, {num: 1}).sort({num: -1}).limit(1).first['num'] + 1
+      @num = client[:notes].find({}, {num: 1}).sort({num: -1}).limit(1).first['num'] + 1
     end
 
-    def persist_thought(thought)
-      client[:thoughts].insert_one(thought.merge(make_timestamps)
+    def persist_note(note)
+      client[:notes].insert_one(note.merge(make_timestamps)
                                           .merge(archived: false))
-      puts "Thought #{@id} created"
+      puts "Note #{@id} created"
     end
 
     def make_timestamps
