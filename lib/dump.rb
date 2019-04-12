@@ -1,4 +1,3 @@
-require_relative 'remote_dump'
 require 'mongo'
 
 puts "%ss to load" % (Time.now - $start)
@@ -17,8 +16,6 @@ class Dump
   end
 
   def process
-    # TODO send title too?
-    puts RemoteDump.new(@text).call rescue puts "Error making remote call: #{$!}"
     tags = create_tags(@text)
     note = {body: @text,
             tags: tags,
