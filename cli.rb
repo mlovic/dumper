@@ -69,15 +69,6 @@ class Dumper < Thor
   method_option :all, aliases: '-a'
   # TODO -a shouldn't take argument
   def list(tag = nil)
-    # optimize later. Array of scopes as symbols? as lambdas?
-    #init
-    #thoughts = options[:all] ? Thought.unscoped : Thought.created_today 
-    #if tag
-      ##clean this up
-      #thoughts = Thought.joins(:tags).where(tags: {name: tag}).merge(thoughts)
-      ## does merge do intersection?
-    #end
-    #thoughts.each { |th| puts "\n" + th.created_at.strftime('%H:%M') + ' -  ' + th.to_s }
   end
 
   desc 'ls', 'alias for list command'
@@ -86,5 +77,4 @@ class Dumper < Thor
   end
 
   default_task :dump
-
 end
