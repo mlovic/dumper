@@ -1,5 +1,7 @@
 class EditorInput
   # TODO figure out editor
+  attr_reader :started_at
+
   def initialize(starting_text = nil, editor: Editor)
     @file = Tempfile.new("buffer")
     @text = starting_text
@@ -7,6 +9,7 @@ class EditorInput
   end
 
   def start
+    @started_at = Time.now
     @pid = spawn_editor
   end
     
